@@ -7,11 +7,25 @@ class PostureDetector:
         self.pose = self.mp_pose.Pose()
         self.baseline = None  # To store baseline posture metrics
 
+    # def get_landmarks(self, image):
+    #     results = self.pose.process(image)
+    #     if not results.pose_landmarks:
+    #         return None
+    #     return results.pose_landmarks.landmark
+
+
+
+    # In posture_detector.py
+
     def get_landmarks(self, image):
-        results = self.pose.process(image)
+        # This is the single, expensive processing call
+        results = self.pose.process(image) 
+        
         if not results.pose_landmarks:
-            return None
-        return results.pose_landmarks.landmark
+            return None, None # Return two Nones
+        
+        # Return BOTH the full results and the landmarks
+        return results, results.pose_landmarks.landmark
 
     def calculate_metrics(self, landmarks):
         # Extract important points
